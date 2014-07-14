@@ -1,4 +1,1 @@
-# how to use
-
-* `npm install`
-* `npm start`
+look at the demo and look at the dom. tweened values will be compiled to css keyframes if they can, and if they cant (ie custom logic like multiplication) it will be animated in js.
