@@ -1,4 +1,5 @@
 var CSSPropertyOperations = require('react/lib/CSSPropertyOperations');
+var invariant = require('react/lib/invariant');
 var Tween = require('./Tween');
 
 // Operates in 3 modes:
@@ -17,6 +18,22 @@ function ReactTween(component, tweenedValue) {
   // STATE:
   this.startTime = null;
 }
+
+ReactTween.prototype.to = function(value, duration, easingFunction) {
+  invariant(!this.startTime, 'ReactTween already started');
+
+  easingFunction = easingFunction || Tween.Ease.linear;
+
+  return new ReactTween(
+    this.component,
+    new Tween.TweenedValue(
+      this.tweenedValue.initialValue,
+      this.tweenedValue.steps.concat([
+        new Tween.TweenedValueStep(value, duration, easingFunction)
+      ])
+    )
+  );    
+};
 
 ReactTween.prototype.get = function() {
   if (!this.startTime) {
@@ -67,8 +84,8 @@ ReactTween.getCSS = function(tweens) {
 };
 
 ReactTween.Mixin = {
-  tween: function(tweenedValue) {
-    return new ReactTween(this, tweenedValue);
+  tween: function(initialValue) {
+    return new ReactTween(this, new Tween.TweenedValue(initialValue, []));
   }
 };
 
