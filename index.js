@@ -16,7 +16,7 @@ var App = React.createClass({
         .to(100, 1, Tween.Ease.easeOut)
         .to(50, 2, Tween.Ease.easeIn),
       size: this.tween(16)
-        .to(32, 3, Tween.Ease.linear.transform(function(time) {
+        .to(32, 3, Tween.Ease.linear.jsTransform(function(time) {
           // custom JS with no css equivalent placeholder
           if (time < .5) {
             return time;

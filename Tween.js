@@ -17,9 +17,9 @@ function TweenedValueStepEasingFunction(cssName, jsFunction) {
   this.jsFunction = jsFunction;
 }
 
-TweenedValueStepEasingFunction.prototype.transform = function(transform) {
+TweenedValueStepEasingFunction.prototype.jsTransform = function(transform) {
   return new TweenedValueStepEasingFunction(
-    null, // I don't know how to compose curves in CSS!
+    null, // If doing it in JS we can't use this optimization.
     function(value) {
       return transform(this.jsFunction(value));
     }.bind(this)
