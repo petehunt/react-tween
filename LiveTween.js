@@ -16,7 +16,6 @@ function LiveTween(tweenedValue, jsTickCallback, startTime) {
 
   // STATE:
   this.unboxed = false;
-  this.animationPrefix = ++animationPrefixSeed;
 
   if (startTime) {
     this._tick = this._tick.bind(this);
@@ -34,7 +33,7 @@ LiveTween.prototype.to = function(value, duration, easingFunction) {
       new Tween.TweenedValueStep(value, duration, easingFunction)
     ),
     this.jsTickCallback
-  );    
+  );
 };
 
 LiveTween.prototype.get = function() {
@@ -76,7 +75,7 @@ LiveTween.getCSS = function(tweens) {
     }
   }
 
-  var cssAnimation = Tween.getCSSAnimation(tweenedValues, 'livetween-' + this.animationPrefix + '-');
+  var cssAnimation = Tween.getCSSAnimation(tweenedValues, 'livetween-' + (animationPrefixSeed++) + '-');
   var keyframeString = '';
 
   for (var animationName in cssAnimation.keyframes) {

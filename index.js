@@ -35,14 +35,25 @@ var App = React.createClass({
     });
   },
 
+  handleClick: function() {
+    // Fly it off the end of the page when you click.
+    this.setState({
+      top: this.tween(this.state.top.get())
+        .to(300, 1, Tween.Ease.easeOut)
+        .start()
+    });
+  },
+
   render: function() {
     return (
-      <Sprite
-        paddingLeft={this.state.left}
-        paddingTop={this.state.top.get() * 2}
-        fontSize={this.state.size}>
-        <h1>Hello React!</h1>
-      </Sprite>
+      <div onClick={this.handleClick}>
+        <Sprite
+          paddingLeft={this.state.left}
+          paddingTop={this.state.top.get() * 2}
+          fontSize={this.state.size}>
+          <h1>Click meeeee</h1>
+        </Sprite>
+      </div>
     );
   }
 });
