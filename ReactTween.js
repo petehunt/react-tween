@@ -1,6 +1,10 @@
 var CSSPropertyOperations = require('react/lib/CSSPropertyOperations');
-//createMarkupForStyles
 var Tween = require('./Tween');
+
+// Operates in 3 modes:
+// 1. CSS tween mode
+// 2. CSS every-keyframe mode
+// 3. Software rendering (reconcile every frame)
 
 var animationPrefixSeed = 0;
 
@@ -39,6 +43,7 @@ ReactTween.prototype.canUseCSS = function() {
 };
 
 ReactTween.getCSS = function(tweens) {
+  // TODO: this is pretty much react-agnostic and could go away.
   var tweenedValues = {};
 
   for (var key in tweens) {
@@ -59,6 +64,12 @@ ReactTween.getCSS = function(tweens) {
   }
 
   return {style: cssAnimation.css, keyframes: keyframeString};
+};
+
+ReactTween.Mixin = {
+  tween: function(tweenedValue) {
+    return new ReactTween(this, tweenedValue);
+  }
 };
 
 module.exports = ReactTween;

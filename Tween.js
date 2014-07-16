@@ -46,13 +46,48 @@ function getValue(tweenedValue, timeIndex) {
   return currentStartValue;
 }
 
+var FRAME_TIME = .016;
+
+function getStepByStepCSSAnimation(tweenedValues, animationPrefix, durations) {
+  var animationCSS = [];
+  var animations = {};
+
+  Object.keys(tweenedValues).forEach(function(key) {
+    var animationName = animationPrefix + key;
+    var keyframes = animations[animationName] = {};
+    
+    animationCSS.push(animationName + ' ' + durations[key] + 's forwards');
+
+    for (var currentTime = 0; currentTime < durations[key]; currentTime += FRAME_TIME) {
+      var percent = currentTime / durations[key];
+      keyframes[percent] = {};
+      keyframes[percent][key] = getValue(tweenedValues[key], currentTime);
+    }
+  });
+
+  console.log('render out', animations);
+
+  return {
+    keyframes: animations,
+    css: {
+      '-webkit-animation': animationCSS.join(', ')
+    }
+  };
+}
+
 function getCSSAnimation(tweenedValues, animationPrefix) {
   var durations = {};
+  var needsStepByStep = false;
   Object.keys(tweenedValues).forEach(function(key) {
     durations[key] = tweenedValues[key].steps.reduce(function(accum, step) {
+      needsStepByStep = needsStepByStep || !step.easingFunction.cssName;
       return accum + step.duration;
     }, 0);
   });
+
+  if (needsStepByStep) {
+    return getStepByStepCSSAnimation(tweenedValues, animationPrefix, durations);
+  }
   
   var animationCSS = [];
   var animations = {};
