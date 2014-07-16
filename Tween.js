@@ -1,5 +1,7 @@
 var Bezier = require('./Bezier');
 
+var invariant = require('react/lib/invariant');
+
 function getCubicBezierEasingFunction(p1x, p1y, p2x, p2y) {
   return new TweenedValueStepEasingFunction('cubic-bezier(' + p1x + ',' + p1y + ',' + p2x + ',' + p2y + ')', Bezier.unitBezier(p1x, p1y, p2x, p2y));
 }
@@ -17,11 +19,13 @@ function TweenedValueStepEasingFunction(cssName, jsFunction) {
   this.jsFunction = jsFunction;
 }
 
-TweenedValueStepEasingFunction.prototype.jsTransform = function(transform) {
+TweenedValueStepEasingFunction.prototype.chain = function(cssName, jsFunction) {
+  invariant(jsFunction && !cssName, 'TODO: allow css transforms?');
+
   return new TweenedValueStepEasingFunction(
-    null, // If doing it in JS we can't use this optimization.
+    null, // Someday?
     function(value) {
-      return transform(this.jsFunction(value));
+      return jsFunction(this.jsFunction(value));
     }.bind(this)
   )
 };
