@@ -9,13 +9,11 @@ var Tween = require('./Tween');
 
 var animationPrefixSeed = 0;
 
-function LiveTween(tweenedValue, jsTickCallback, startTime) {
+function LiveTween(tweenedValue, canReadValue, jsTickCallback, startTime) {
   this.tweenedValue = tweenedValue;
+  this.canReadValue = canReadValue;
   this.jsTickCallback = jsTickCallback;
   this.startTime = startTime || null;
-
-  // STATE:
-  this.unboxed = false;
 
   if (startTime) {
     this._tick = this._tick.bind(this);
@@ -24,7 +22,7 @@ function LiveTween(tweenedValue, jsTickCallback, startTime) {
 }
 
 LiveTween.prototype.to = function(value, duration, easingFunction) {
-  invariant(!this.startTime && !this.unboxed, 'LiveTween already started');
+  invariant(!this.startTime, 'LiveTween already started');
 
   easingFunction = easingFunction || Tween.Ease.linear;
 
@@ -32,13 +30,18 @@ LiveTween.prototype.to = function(value, duration, easingFunction) {
     this.tweenedValue.cloneWithStep(
       new Tween.TweenedValueStep(value, duration, easingFunction)
     ),
+    this.canReadValue,
     this.jsTickCallback
   );
 };
 
 LiveTween.prototype.get = function() {
-  this.unboxed = true;
+  invariant(this.canReadValue, 'Did not create LiveTween with canReadValue');
 
+  return this.peek();
+};
+
+LiveTween.prototype.peek = function() {
   if (!this.startTime) {
     return Tween.getValue(this.tweenedValue, 0);
   }
@@ -49,21 +52,30 @@ LiveTween.prototype.get = function() {
 LiveTween.prototype.start = function() {
   return new LiveTween(
     this.tweenedValue,
+    this.canReadValue,
     this.jsTickCallback,
     Date.now()
   );
 };
 
+LiveTween.prototype.getTime = function() {
+  return (Date.now() - this.startTime) / 1000;
+};
+
+LiveTween.prototype.getDuration = function() {
+  return Tween.getDuration(this.tweenedValue);
+};
+
 LiveTween.prototype._tick = function() {
   // TODO: do this with setState() and no mutation?
   this.jsTickCallback();
-  if ((Date.now() - this.startTime) / 1000 <= Tween.getDuration(this.tweenedValue)) {
+  if (this.getTime() < this.getDuration()) {
     LiveTween.injection._requestAnimationFrame(this._tick);
   }
 };
 
 LiveTween.prototype.canUseCSS = function() {
-  return !this.unboxed;
+  return !this.canReadValue;
 };
 
 LiveTween.getCSS = function(tweens) {

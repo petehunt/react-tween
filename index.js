@@ -12,7 +12,7 @@ var App = React.createClass({
       left: this.tween(0)
         .to(100, 1, Tween.Ease.easeOut)
         .to(50, 2, Tween.Ease.easeIn),
-      top: this.tween(0)
+      top: this.readableTween(0)
         .to(100, 1, Tween.Ease.easeOut)
         .to(50, 2, Tween.Ease.easeIn),
       size: this.tween(16)
@@ -38,8 +38,8 @@ var App = React.createClass({
   handleClick: function() {
     // Fly it off the end of the page when you click.
     this.setState({
-      top: this.tween(this.state.top.get())
-        .to(300, 1, Tween.Ease.easeOut)
+      left: this.tween(this.state.left.peek())
+        .to(500, 3, Tween.Ease.easeOut)
         .start()
     });
   },

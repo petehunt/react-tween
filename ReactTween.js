@@ -30,6 +30,15 @@ var ReactTween = {
     tween: function(initialValue) {
       return new LiveTween(
         new Tween.TweenedValue(initialValue, []),
+        false,
+        this.forceUpdate.bind(this)
+      );
+    },
+
+    readableTween: function(initialValue) {
+      return new LiveTween(
+        new Tween.TweenedValue(initialValue, []),
+        true,
         this.forceUpdate.bind(this)
       );
     }
