@@ -26,11 +26,8 @@ ReactTween.prototype.to = function(value, duration, easingFunction) {
 
   return new ReactTween(
     this.component,
-    new Tween.TweenedValue(
-      this.tweenedValue.initialValue,
-      this.tweenedValue.steps.concat([
-        new Tween.TweenedValueStep(value, duration, easingFunction)
-      ])
+    this.tweenedValue.cloneWithStep(
+      new Tween.TweenedValueStep(value, duration, easingFunction)
     )
   );    
 };

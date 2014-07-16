@@ -17,11 +17,24 @@ function TweenedValueStepEasingFunction(cssName, jsFunction) {
   this.jsFunction = jsFunction;
 }
 
+TweenedValueStepEasingFunction.prototype.transform = function(transform) {
+  return new TweenedValueStepEasingFunction(
+    null, // I don't know how to compose curves in CSS!
+    function(value) {
+      return transform(this.jsFunction(value));
+    }.bind(this)
+  )
+};
+
 // A representation of a single CSS property as in a keyframe animation
 function TweenedValue(initialValue, steps) {
   this.initialValue = initialValue;
   this.steps = steps;
 }
+
+TweenedValue.prototype.cloneWithStep = function(step) {
+  return new TweenedValue(this.initialValue, this.steps.concat([step]));
+};
 
 function TweenedValueStep(finalValue, duration, easingFunction) {
   this.finalValue = finalValue;

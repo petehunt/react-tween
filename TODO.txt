@@ -1,0 +1,2 @@
+- explicitly start animations
+- change tweens to general sequences
