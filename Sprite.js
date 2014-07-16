@@ -1,7 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require('react');
-var ReactTween = require('./ReactTween');
+var LiveTween = require('./LiveTween');
 
 var insertCSS = require('insert-css');
 
@@ -11,14 +11,14 @@ var Sprite = React.createClass({
 
     for (var key in nextTweens) {
       if (nextTweens[key] !== prevTweens[key]) {
-        this._cssAnimation = ReactTween.getCSS(nextTweens);
+        this._cssAnimation = LiveTween.getCSS(nextTweens);
         insertCSS(this._cssAnimation.keyframes);
         return;
       }
     }
   },
 
-  _getReactTweens: function(props) {
+  _getLiveTweens: function(props) {
     // TODO: remove this?
     var tweens = {};
     for (var key in props) {
@@ -26,7 +26,7 @@ var Sprite = React.createClass({
         continue;
       }
 
-      if (props[key] instanceof ReactTween) {
+      if (props[key] instanceof LiveTween) {
         tweens[key] = props[key];
       }
     }
@@ -34,13 +34,13 @@ var Sprite = React.createClass({
   },
 
   componentWillMount: function() {
-    this.ensureCSSInserted({}, this._getReactTweens(this.props));
+    this.ensureCSSInserted({}, this._getLiveTweens(this.props));
   },
 
   componentWillReceiveProps: function(nextProps) {
     this.ensureCSSInserted(
-      this._getReactTweens(this.props),
-      this._getReactTweens(nextProps)
+      this._getLiveTweens(this.props),
+      this._getLiveTweens(nextProps)
     );
   },
 
@@ -48,7 +48,7 @@ var Sprite = React.createClass({
     var style = {};
     for (var key in this.props) {
       var prop = this.props[key];
-      if (prop instanceof ReactTween) {
+      if (prop instanceof LiveTween) {
         if (!prop.canUseCSS()) {
           style[key] = prop.get();
         }

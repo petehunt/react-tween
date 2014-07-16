@@ -27,6 +27,14 @@ var App = React.createClass({
     };
   },
 
+  componentDidMount: function() {
+    this.setState({
+      left: this.state.left.start(),
+      top: this.state.top.start(),
+      size: this.state.size.start()
+    });
+  },
+
   render: function() {
     return (
       <Sprite

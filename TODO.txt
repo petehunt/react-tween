@@ -1,3 +1,2 @@
-- explicitly start animations
 - change tweens to general sequences
-- batch callbacks, unsubscribe when not animating
+- unsubscribe when not animating
