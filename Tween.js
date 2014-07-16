@@ -65,8 +65,6 @@ function getStepByStepCSSAnimation(tweenedValues, animationPrefix, durations) {
     }
   });
 
-  console.log('render out', animations);
-
   return {
     keyframes: animations,
     css: {

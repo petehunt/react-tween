@@ -12,6 +12,7 @@ var App = React.createClass({
       left: this.tween(new Tween.TweenedValue(0, [new Tween.TweenedValueStep(100, 1, Tween.Ease.easeOut), new Tween.TweenedValueStep(50, 2, Tween.Ease.easeIn)])),
       top: this.tween(new Tween.TweenedValue(0, [new Tween.TweenedValueStep(100, 1, Tween.Ease.easeOut), new Tween.TweenedValueStep(50, 2, Tween.Ease.easeIn)])),
       size: this.tween(new Tween.TweenedValue(16, [new Tween.TweenedValueStep(32, 3, new Tween.TweenedValueStepEasingFunction(null, function(time) {
+        // custom JS with no css equivalent placeholder
         if (time < .5) {
           return time;
         } else {
