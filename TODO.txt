@@ -1,1 +1,3 @@
-I don't know?
+- merge keyframes to make translate3d() / smaller animation size (i.e. create 1 animation per Sprite rather than 1 per Sprite per property)
+- get() should not flip it into JS mode. it shoudl be instantiated in JS mode due to clock skew
+- Sprite should force JS mode for all if any property is animated in JS
