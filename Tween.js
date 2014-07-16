@@ -63,6 +63,12 @@ function getValue(tweenedValue, timeIndex) {
   return currentStartValue;
 }
 
+function getDuration(tweenedValue) {
+  return tweenedValue.steps.reduce(function(accum, step) {
+    return accum + step.duration;
+  }, 0);
+}
+
 var FRAME_TIME = .016;
 
 function getStepByStepCSSAnimation(tweenedValues, animationPrefix, durations) {
@@ -127,7 +133,6 @@ function getCSSAnimation(tweenedValues, animationPrefix) {
     });
   });
 
-  // TODO: use react internals to serialize this to a string
   return {
     keyframes: animations,
     css: {
@@ -141,6 +146,7 @@ module.exports = {
   TweenedValueStepEasingFunction: TweenedValueStepEasingFunction,
   TweenedValueStep: TweenedValueStep,
   TweenedValue: TweenedValue,
-  getValue: getValue,
-  getCSSAnimation: getCSSAnimation
+  getCSSAnimation: getCSSAnimation,
+  getDuration: getDuration,
+  getValue: getValue
 };

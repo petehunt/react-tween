@@ -56,10 +56,11 @@ LiveTween.prototype.start = function() {
 };
 
 LiveTween.prototype._tick = function() {
-  // TODO: cancel raf when done animating!
   // TODO: do this with setState() and no mutation?
   this.jsTickCallback();
-  LiveTween.injection._requestAnimationFrame(this._tick);
+  if ((Date.now() - this.startTime) / 1000 <= Tween.getDuration(this.tweenedValue)) {
+    LiveTween.injection._requestAnimationFrame(this._tick);
+  }
 };
 
 LiveTween.prototype.canUseCSS = function() {
