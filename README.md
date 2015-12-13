@@ -1,5 +1,7 @@
 # react-tween
 
+![unmaintained](http://img.shields.io/badge/status-unmaintained-red.png)
+
 ## intro
 
 I don't know anything about animation and I haven't looked at prior art so none of this is novel most likely.
